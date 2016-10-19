@@ -43,4 +43,24 @@ def get_words_array(path):
         text = text.replace(old, new)
 
     # Return the words of the text in array
-    return re.split("\s+", text)
+    return remove_under_3(re.split("\s+", text))
+
+
+def remove_under_3(word_array):
+    word_dict = {}
+    for word in word_array:
+        if word in word_dict:
+            word_dict[word] += 1
+        else:
+            word_dict[word] = 1
+
+    replace_word = set()
+    for key, value in word_dict.items():
+        if value < 3:
+            replace_word.add(key)
+
+    for x in range(0, len(word_array)):
+        if word_array[x] in replace_word:
+            word_array[x] = "<UNK>"
+
+    return word_array
