@@ -12,6 +12,16 @@ if __name__ == '__main__':
         else:
             word_dict[word] = 1
 
+	# Removing and replacing word that occurs less than 3 times by <UNK>
+    key_to_remove = list()
+    for key ,value in word_dict.items():
+        if value < 3:
+            word_dict["<UNK>"] += value
+            key_to_remove.append(key)
+    
+    for key in key_to_remove:
+        del word_dict[key]
+
     with open("word_occurence.txt", 'w', encoding="utf-8") as output:
         occurence_list = []
         for key, value in word_dict.items():

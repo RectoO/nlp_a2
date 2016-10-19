@@ -1,5 +1,5 @@
 import re
-
+import codecs
 
 def get_words_array(path):
     """
