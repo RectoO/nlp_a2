@@ -1,4 +1,4 @@
-from text_to_corpus import get_words_array
+from text_to_corpus import get_words_array, pre_process
 
 
 def print_occurence(array, path):
@@ -18,7 +18,10 @@ def print_occurence(array, path):
             output.write(key+" = "+str(value)+"\n")
 
 if __name__ == '__main__':
-    path = "Dumas/Dumas_train.txt"
-    word_array = get_words_array(path)
+    train_path = "Dumas/Dumas_train.txt"
+    test_path = "Dumas/Dumas_test.txt"
+    train_word_array = get_words_array(train_path)
+    test_word_array = pre_process(test_path)
 
-    print_occurence(word_array, "word_occurence.txt")
+    print_occurence(train_word_array, "word_occurence.txt")
+    print_occurence(test_word_array, "test_occurence.txt")

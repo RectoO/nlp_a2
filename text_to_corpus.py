@@ -1,7 +1,12 @@
 import re
 import codecs
 
+
 def get_words_array(path):
+    return remove_under_3(pre_process(path))
+
+
+def pre_process(path):
     """
     Return an array of word in path. We first prune the file to remove noises
     """
@@ -15,13 +20,13 @@ def get_words_array(path):
     # Number regex
     number_regex = "[0-9]+"
     # Special rules
-    remove_special = [(" &amp; ", "&"), ("!", " ! "), ("?", " ? "),
-                      (".", " . "), ("Mlle.", "Mlle"), ("Mr.", "Mr"),
-                      ("Mme.", "Mme"), ("Lord.", "Lord"), ("Dr.", "Dr"),
-                      ("Dom.", "Dom")]
+    remove_special = [(" &amp; ", "&"), ("!", " <ES> "), ("?", " <ES> "),
+                      (".", " <ES> "), (":", " <ES> "), ("Mlle.", "Mlle"),
+                      ("Mr.", "Mr"), ("Mme.", "Mme"), ("Lord.", "Lord"),
+                      ("Dr.", "Dr"), ("Dom.", "Dom")]
 
     # Read the file
-    with codecs.open(path, "r",encoding='utf-8', errors='ignore') as f:
+    with codecs.open(path, "r", encoding='utf-8', errors='ignore') as f:
         text = f.read().lower()
 
     # Remove the useless characters
@@ -43,7 +48,7 @@ def get_words_array(path):
         text = text.replace(old, new)
 
     # Return the words of the text in array
-    return remove_under_3(re.split("\s+", text))
+    return re.split("\s+", text)
 
 
 def remove_under_3(word_array):
