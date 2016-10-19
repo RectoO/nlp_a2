@@ -21,7 +21,7 @@ def get_words_array(path):
                       ("Dom.", "Dom")]
 
     # Read the file
-    with open(path, 'r') as f:
+    with codecs.open(path, "r",encoding='utf-8', errors='ignore') as f:
         text = f.read().lower()
 
     # Remove the useless characters
