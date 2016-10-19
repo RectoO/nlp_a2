@@ -7,16 +7,22 @@ def get_words_array(path):
     """
     # Removed characters
     remove_char = ['"', '\'', ',', '‚', ';', '-', '(', ')', '$', '`', '*',
-                   '&gt']
+                   '&gt', 'Frs.', 'frs.']
     # Removed section
     remove_section = [('\[', '\]'), ('<', '>')]
+    # Dot regex
+    dot_regex = "[a-zA-Z]*\.\.+[a-zA-Z]*"
+    # Number regex
+    number_regex = "[0-9]+"
     # Special rules
     remove_special = [(" &amp; ", "&"), ("!", " ! "), ("?", " ? "),
-                      (".", " . ")]
+                      (".", " . "), ("Mlle.", "Mlle"), ("Mr.", "Mr"),
+                      ("Mme.", "Mme"), ("Lord.", "Lord"), ("Dr.", "Dr"),
+                      ("Dom.", "Dom")]
 
     # Read the file
     with open(path, 'r') as f:
-        text = f.read()
+        text = f.read().lower()
 
     # Remove the useless characters
     for char in remove_char:
@@ -25,6 +31,12 @@ def get_words_array(path):
     # Remove the useless sections
     for (begin, end) in remove_section:
         text = re.sub("("+begin+")(.)*("+end+")", "", text)
+
+    # Replace dot dot dot by <UNK> tag
+    text = re.sub(dot_regex, "<UNK>", text)
+
+    # Replace dot dot dot by <UNK> tag
+    text = re.sub(number_regex, "<NBR>", text)
 
     # Applying the special replacements rules
     for (old, new) in remove_special:
