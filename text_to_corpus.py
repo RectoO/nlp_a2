@@ -69,3 +69,54 @@ def remove_under_3(word_array):
             word_array[x] = "<UNK>"
 
     return word_array
+
+
+def n_gram(word_array, n):
+    unigram = dict()
+
+    for wordIndex in range(0, len(word_array)-(n-1)):
+        word = list()
+        for x in range(0, n):
+            word.append(word_array[(wordIndex + x)])
+
+        wordHash = str(word)
+        if wordHash in unigram:
+            unigram[wordHash] += 1
+        else:
+            unigram[wordHash] = 1
+
+    return unigram
+
+
+def ngram_occurence(ngram_dict):
+    occurence_dict = dict()
+    for key, value in ngram_dict.items():
+        if value in occurence_dict:
+            occurence_dict[value] += 1
+        else:
+            occurence_dict[value] = 1
+
+    return occurence_dict
+
+
+def prediction_dictionnary(word_array, n):
+    pred_dict = dict()
+    current_dict = dict()
+
+    for x in range(n, len(word_array)):
+        current_dict = pred_dict
+        for y in range(n, 0, -1):
+            wordIndex = x-y
+
+            if word_array[wordIndex] in current_dict:
+                current_dict = current_dict[word_array[wordIndex]]
+            else:
+                current_dict[word_array[wordIndex]] = dict()
+                current_dict = current_dict = current_dict[word_array[wordIndex]]
+
+        if word_array[x] in current_dict:
+            current_dict[word_array[x]] += 1
+        else:
+            current_dict[word_array[x]] = 1
+
+    return pred_dict
