@@ -20,10 +20,12 @@ def pre_process(path):
     # Number regex
     number_regex = "[0-9]+"
     # Special rules
-    remove_special = [(" &amp; ", "&"), ("!", " <ES> "), ("?", " <ES> "),
-                      (".", " <ES> "), (":", " <ES> "), ("Mlle.", "Mlle"),
-                      ("Mr.", "Mr"), ("Mme.", "Mme"), ("Lord.", "Lord"),
-                      ("Dr.", "Dr"), ("Dom.", "Dom")]
+    remove_special = [(" &amp; ", "&"), ("mlle.", "mlle"), ("mr.", "mr"),
+                      ("mme.", "mme"), ("lord.", "lord"), ("dr.", "dr"),
+                      ("dom.", "dom")]
+    # End tag
+    end_tag = [("!", " </s> <s> "), ("?", " </s> <s> "), (".", " </s> <s> "),
+               (":", " </s> <s> ")]
 
     # Read the file
     with codecs.open(path, "r", encoding='utf-8', errors='ignore') as f:
@@ -40,15 +42,27 @@ def pre_process(path):
     # Replace dot dot dot by <UNK> tag
     text = re.sub(dot_regex, "<UNK>", text)
 
-    # Replace dot dot dot by <UNK> tag
+    # Replace number by <UNK> tag
     text = re.sub(number_regex, "<NBR>", text)
 
     # Applying the special replacements rules
     for (old, new) in remove_special:
         text = text.replace(old, new)
 
-    # Return the words of the text in array
-    return re.split("\s+", text)
+    # End Tag
+    for (old, new) in end_tag:
+        text = text.replace(old, new)
+
+    # Start tag
+    text = "<s> " + text
+
+    # Every words in an array
+    word_array = re.split("\s+", text)
+
+    # Remove last start tag if any
+    if word_array[-1] == '</s>':
+        return word_array[:-1]
+    return word_array
 
 
 def remove_under_3(word_array):
@@ -72,7 +86,7 @@ def remove_under_3(word_array):
 
 
 def n_gram(word_array, n):
-    unigram = dict()
+    n_gram_dict = dict()
 
     for wordIndex in range(0, len(word_array)-(n-1)):
         word = list()
@@ -80,12 +94,12 @@ def n_gram(word_array, n):
             word.append(word_array[(wordIndex + x)])
 
         wordHash = str(word)
-        if wordHash in unigram:
-            unigram[wordHash] += 1
+        if wordHash in n_gram_dict:
+            n_gram_dict[wordHash] += 1
         else:
-            unigram[wordHash] = 1
+            n_gram_dict[wordHash] = 1
 
-    return unigram
+    return n_gram_dict
 
 
 def ngram_occurence(ngram_dict):
