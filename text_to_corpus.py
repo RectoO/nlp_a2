@@ -120,3 +120,21 @@ def prediction_dictionnary(word_array, n):
             current_dict[word_array[x]] = 1
 
     return pred_dict
+
+
+def predict_with_laplace(prediction_dictionnary, previous_words, lookedup_word):
+    current_dict = prediction_dictionnary
+    for p_word in previous_words:
+        if p_word in current_dict:
+            current_dict = current_dict[p_word]
+        else:
+            return 1/len(prediction_dictionnary)
+
+    ch = 0
+    for key, value in current_dict.items():
+        ch += value
+
+    if lookedup_word in current_dict:
+        return (current_dict[lookedup_word] + 1)/(ch+len(prediction_dictionnary))
+    else:
+        return 1/(ch+len(prediction_dictionnary))
