@@ -6,6 +6,10 @@ def get_words_array(path):
     return remove_under_3(pre_process(path))
 
 
+def get_sentence_array(paty):
+    return sentence_array(get_words_array(path))
+
+
 def pre_process(path):
     """
     Return an array of word in path. We first prune the file to remove noises
@@ -88,6 +92,28 @@ def remove_under_3(word_array):
             word_array[x] = "<UNK>"
 
     return word_array
+
+
+def sentence_array(word_array):
+    # New sentence array
+    sentence_array = []
+    # Building sentence
+    current_sentence = []
+    # Iterate over every words
+    for word in word_array:
+        # If it's the end of a sentence
+        if word == '</s>':
+            # We end our current sentence
+            current_sentence.append(word)
+            # We add the sentence in our sentence array
+            sentence_array.append(current_sentence[:])
+            # We reste our current sentence
+            current_sentence = []
+        else:
+            # We update our current sentence
+            current_sentence.append(word)
+
+    return sentence_array
 
 
 def n_gram(word_array, n):
