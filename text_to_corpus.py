@@ -1,5 +1,6 @@
 import re
 import codecs
+import json
 
 
 def get_words_array(path):
@@ -68,7 +69,6 @@ def pre_process(path):
         del word_array[-1]
 
     # Add a end tag if needed
-    print(word_array[-1])
     if word_array[-1] != '</s>':
         word_array.append('</s>')
     return word_array
@@ -116,19 +116,19 @@ def sentence_array(word_array):
     return sentence_array
 
 
-def n_gram(word_array, n):
+def n_gram(sentence_list, n):
     n_gram_dict = dict()
+    for sentence in sentence_list:
+        for wordIndex in range(0, len(sentence)-(n-1)):
+            word = list()
+            for x in range(0, n):
+                word.append(sentence[(wordIndex + x)])
 
-    for wordIndex in range(0, len(word_array)-(n-1)):
-        word = list()
-        for x in range(0, n):
-            word.append(word_array[(wordIndex + x)])
-
-        wordHash = str(word)
-        if wordHash in n_gram_dict:
-            n_gram_dict[wordHash] += 1
-        else:
-            n_gram_dict[wordHash] = 1
+            wordHash = str(word)
+            if wordHash in n_gram_dict:
+                n_gram_dict[wordHash] += 1
+            else:
+                n_gram_dict[wordHash] = 1
 
     return n_gram_dict
 
@@ -144,27 +144,48 @@ def ngram_occurence(ngram_dict):
     return occurence_dict
 
 
-def prediction_dictionnary(word_array, n):
+def prediction_dictionnary(sentence_list, n):
     pred_dict = dict()
-    current_dict = dict()
+    # We built the dictionnary for each sentence
+    for sentence in sentence_list:
+        # We iterate trought the words of the sentence
+        for x in range(1, len(sentence)):
+            # We create a list of the previous word for the current word
+            list_previous_word = list()
+            for y in range(x-n, x+1):
+                if y >= 0:
+                    list_previous_word.append(sentence[y])
 
-    for x in range(n, len(word_array)):
-        current_dict = pred_dict
-        for y in range(n, 0, -1):
-            wordIndex = x-y
-
-            if word_array[wordIndex] in current_dict:
-                current_dict = current_dict[word_array[wordIndex]]
-            else:
-                current_dict[word_array[wordIndex]] = dict()
-                current_dict = current_dict = current_dict[word_array[wordIndex]]
-
-        if word_array[x] in current_dict:
-            current_dict[word_array[x]] += 1
-        else:
-            current_dict[word_array[x]] = 1
+            # Populate the pred_dict with each different n
+            for i in range(0, len(list_previous_word)-1):
+                populate_pred_dict(list_previous_word[i:], pred_dict)
 
     return pred_dict
+
+
+def populate_pred_dict(list_word, pred_dict):
+
+    # Creating dict to search in the recursive structure
+    current_dict = pred_dict
+
+    # We search the phrase trought the dictionary and stop before the last word
+    for x in range(0, len(list_word)-1):
+        if list_word[x] in current_dict:
+            current_dict = current_dict[list_word[x]]['next']
+        else:
+            current_dict[list_word[x]] = dict()
+            current_dict[list_word[x]]['score'] = 0
+            current_dict[list_word[x]]['next'] = dict()
+
+            current_dict = current_dict[list_word[x]]['next']
+
+    # Here we increment the occurence for the last word in the last dict
+    if list_word[len(list_word)-1] in current_dict:
+        current_dict[list_word[len(list_word)-1]]['score'] += 1
+    else:
+        current_dict[list_word[len(list_word)-1]] = dict()
+        current_dict[list_word[len(list_word)-1]]['score'] = 1
+        current_dict[list_word[len(list_word)-1]]['next'] = dict()
 
 
 def predict_with_laplace(prediction_dictionnary, previous_words, lookedup_word):
@@ -183,3 +204,6 @@ def predict_with_laplace(prediction_dictionnary, previous_words, lookedup_word):
         return (current_dict[lookedup_word] + 1)/(ch+len(prediction_dictionnary))
     else:
         return 1/(ch+len(prediction_dictionnary))
+
+def predict_top_n_word(pred_dict, previous_word):
+    pass
