@@ -57,11 +57,16 @@ def pre_process(path):
     text = "<s> " + text
 
     # Every words in an array
-    word_array = re.split("\s+", text)
+    word_array = re.split("\s+", text.strip())
 
-    # Remove last start tag if any
-    if word_array[-1] == '</s>':
-        return word_array[:-1]
+    # Remove last start tag if needed
+    if word_array[-1] == '<s>':
+        del word_array[-1]
+
+    # Add a end tag if needed
+    print(word_array[-1])
+    if word_array[-1] != '</s>':
+        word_array.append('</s>')
     return word_array
 
 
