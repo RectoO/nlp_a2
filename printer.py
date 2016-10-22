@@ -12,7 +12,7 @@ def print_occurence(array, path):
             occurence_list.append((key, value))
         for (key, value) in sorted(occurence_list,
                                    key=lambda x: (-x[1], x[0])):
-            output.write(key+" = "+str(value)+"\n")
+            output.write(key+" = "+str(value)+" ("+str(round(value/1398349.0,3))+"%)\n")
 
 
 def print_ngram(ngram_dict, path):

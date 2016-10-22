@@ -11,6 +11,12 @@ def get_sentence_array(path):
     return sentence_array(get_words_array(path))
 
 
+def get_sentence_array(path_train, path_test):
+    train_array = sentence_array(get_words_array(path_train))
+    test_array = sentence_array(pre_process(path_test))
+    return (train_array, test_array)
+
+
 def pre_process(path):
     """
     Return an array of word in path. We first prune the file to remove noises
