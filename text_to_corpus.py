@@ -6,7 +6,7 @@ def get_words_array(path):
     return remove_under_3(pre_process(path))
 
 
-def get_sentence_array(paty):
+def get_sentence_array(path):
     return sentence_array(get_words_array(path))
 
 
