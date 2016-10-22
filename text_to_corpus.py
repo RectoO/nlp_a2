@@ -16,7 +16,7 @@ def pre_process(path):
     """
     # Removed characters
     remove_char = ['"', '\'', ',', '‚', ';', '-', '(', ')', '$', '`', '*',
-                   '&gt', 'Frs.', 'frs.']
+                   '&gt', 'frs.']
     # Removed section
     remove_section = [('\[', '\]'), ('<', '>')]
     # Dot regex
@@ -68,7 +68,6 @@ def pre_process(path):
         del word_array[-1]
 
     # Add a end tag if needed
-    print(word_array[-1])
     if word_array[-1] != '</s>':
         word_array.append('</s>')
     return word_array
