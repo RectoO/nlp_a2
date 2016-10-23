@@ -17,7 +17,7 @@ if __name__ == '__main__':
     for n in range(1, 4):
         # n_gram
         gram = 4-n
-        print("Building "+str(gram)+"_gram dictionnary")
+        print("Building "+str(gram)+"_gram histogram")
         # Buid the n_gram dict
         n_gram_dict = n_gram(train_word_array, gram)
         # Build the frequency of frequency
@@ -30,3 +30,4 @@ if __name__ == '__main__':
 
     # Plot all the n_gram together
     plot_ngram_list(n_gram_dict_list, gram_list, color_list)
+    print("All histograms printed")

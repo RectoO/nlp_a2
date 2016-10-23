@@ -56,6 +56,7 @@ def plot_ngram(ngram_dict, gram, color="purple"):
     plt.figure()
     plt.bar(x, y, color="white", edgecolor=color, align="center", log=True)
     plt.xscale('log')
+    plt.xlim(xmin=0)
 
     # The legend
     patch = mpatches.Patch(color=color, label=str(gram)+'-gram')
@@ -92,6 +93,7 @@ def plot_ngram_list(ngram_dict_list, gram_list, color_list):
         patch_list.append(patch)
     plt.legend(handles=patch_list)
     plt.xscale('log')
+    plt.xlim(xmin=0)
 
     # Save the plot
     file_path = "n_gram_plot/all_gram_count_histogram.png"
