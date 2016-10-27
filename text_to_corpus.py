@@ -13,8 +13,11 @@ def get_sentence_array_process(path):
 
 
 def get_sentence_array(path_train, path_test):
-    train_array = sentence_array(get_words_array(path_train))
-    test_array = sentence_array(pre_process(path_test))
+    word_array, unknown_list = remove_under_3(pre_process(path_train), get_list=True)
+    train_array = sentence_array(word_array)
+    test_word_array = remove_unknown(pre_process(path_test), unknown_list)
+    test_array = sentence_array(test_word_array)
+
     return (train_array, test_array)
 
 
@@ -81,7 +84,7 @@ def pre_process(path):
     return word_array
 
 
-def remove_under_3(word_array):
+def remove_under_3(word_array, get_list=False):
     word_dict = {}
     for word in word_array:
         if word in word_dict:
@@ -96,6 +99,17 @@ def remove_under_3(word_array):
 
     for x in range(0, len(word_array)):
         if word_array[x] in replace_word:
+            word_array[x] = "<UNK>"
+
+    if get_list:
+        return word_array, replace_word
+    else:
+        return word_array
+
+
+def remove_unknown(word_array, unknown_list):
+    for x in range(0, len(word_array)):
+        if word_array[x] in unknown_list:
             word_array[x] = "<UNK>"
 
     return word_array
