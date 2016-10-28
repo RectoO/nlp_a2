@@ -44,7 +44,7 @@ if __name__ == '__main__':
     pred_dict = prediction_dictionnary(train_sentence_array, 5)
     print(pred_dict['</s>'])
     #print("Computing perplexity")
-    print(compute_perplexity_laplace(pred_dict, test_sentence_array, 3))
+    print(compute_perplexity_laplace(pred_dict, test_sentence_array, 1))
 
 
 

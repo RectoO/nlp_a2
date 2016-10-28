@@ -317,7 +317,6 @@ def compute_perplexity_laplace(pred_dict, sentence_array, n):
 
             # If the word is out of vocab we count it
             else:
-                print(sentence[wordIndex])
                 out_of_vocab += 1
 
     return 2**(-1*(total_perplexity/m)), out_of_vocab/considered_word
