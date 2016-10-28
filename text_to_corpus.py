@@ -145,40 +145,40 @@ def prediction_dictionnary(sentence_list, n):
         for x in range(1, len(sentence)):
             # We create a list of the previous word for the current word
             list_previous_word = list()
-            for y in range(x-n, x+1):
+            for y in range(x-n, x):
                 if y >= 0:
                     list_previous_word.append(sentence[y])
 
             # Populate the pred_dict with each different n
-            for i in range(0, len(list_previous_word)-1):
-                populate_pred_dict(list_previous_word[i:], pred_dict)
+            for i in range(0, len(list_previous_word)+1):
+                populate_pred_dict(list_previous_word[i:], sentence[y], pred_dict)
 
     return pred_dict
 
 
-def populate_pred_dict(list_word, pred_dict):
+def populate_pred_dict(prev_word,current_word, pred_dict):
 
     # Creating dict to search in the recursive structure
     current_dict = pred_dict
 
     # We search the phrase trought the dictionary and stop before the last word
-    for x in range(0, len(list_word)-1):
-        if list_word[x] in current_dict:
-            current_dict = current_dict[list_word[x]]['next']
+    for x in range(0, len(prev_word)):
+        if prev_word[x] in current_dict:
+            current_dict = current_dict[prev_word[x]]['next']
         else:
-            current_dict[list_word[x]] = dict()
-            current_dict[list_word[x]]['score'] = 0
-            current_dict[list_word[x]]['next'] = dict()
+            current_dict[prev_word[x]] = dict()
+            current_dict[prev_word[x]]['score'] = 0
+            current_dict[prev_word[x]]['next'] = dict()
 
-            current_dict = current_dict[list_word[x]]['next']
+            current_dict = current_dict[prev_word[x]]['next']
 
     # Here we increment the occurence for the last word in the last dict
-    if list_word[len(list_word)-1] in current_dict:
-        current_dict[list_word[len(list_word)-1]]['score'] += 1
+    if current_word in current_dict:
+        current_dict[current_word]['score'] += 1
     else:
-        current_dict[list_word[len(list_word)-1]] = dict()
-        current_dict[list_word[len(list_word)-1]]['score'] = 1
-        current_dict[list_word[len(list_word)-1]]['next'] = dict()
+        current_dict[current_word] = dict()
+        current_dict[current_word]['score'] = 1
+        current_dict[current_word]['next'] = dict()
 
 
 def predict_with_laplace(prediction_dictionnary, previous_words, lookedup_word):
@@ -216,7 +216,6 @@ def get_proba(pred_dict, previous_word, lookedup_word):
     current_dict = pred_dict
 
     for p_word in previous_word:
-
         if p_word in current_dict:
             current_dict = current_dict[p_word]['next']
         else:
@@ -230,6 +229,7 @@ def get_proba(pred_dict, previous_word, lookedup_word):
         return current_dict[lookedup_word]['score']/ch
     else:
         return 0
+
 """
 def estimation_maximisation(sentence_array, n):
     lambda_list = [1/n] * n
@@ -268,28 +268,55 @@ def compute_expectation(pred_dict, lamdb, lambda_list, sentence_test):
 
 
 def compute_perplexity_laplace(pred_dict, sentence_array, n):
+
+    # The amout of time we computed a proba
     m = 0
+
+    # The total current preplexity
     total_perplexity = 0
+
+    # Number of out of vocab words
     out_of_vocab = 0
 
+    # The amout of word we have parsed so far
+    # It is different of m because we also considere OOV words here
+    considered_word = 0
+
+
     current_sentence = 0
-    print(len(sentence_array))
+
+    # For each sentence in the sentence set
     for sentence in sentence_array:
-        print(total_perplexity)
-        print(out_of_vocab)
-        print(m)
+        print("total perplexity : " + str(total_perplexity))
+        print("out of vocab count : " + str(out_of_vocab))
+        print("m : " + str(m))
         current_sentence += 1
         print(str(current_sentence) + "/" + str(len(sentence_array)))
-        for wordIndex in range(n, len(sentence)):
-            if sentence[wordIndex] == '<UNK>':
-                out_of_vocab += 1
-            m += 1
-            previous_word_array = list()
-            for previous_word_index in range(wordIndex-n, n):
-                previous_word_array.append(sentence[previous_word_index])
-            proba = predict_with_laplace(pred_dict,
-                                         previous_word_array,
-                                         sentence[wordIndex])
-            total_perplexity += math.log(proba, 2)
 
-    return 2**(-1*(total_perplexity/m)), out_of_vocab/m
+        # For each word in the sentence we compute the perplexity
+        # We start at n becasue we can' estimate words earlier than n because
+        # we don't have enought history
+        for wordIndex in range(n, len(sentence)):
+            considered_word += 1
+            # Here verify that the word in not out of vocab
+            if sentence[wordIndex] in pred_dict:
+                m += 1
+
+                # We create an array witht the word history
+                previous_word_array = list()
+                for previous_word_index in range(wordIndex-n, n):
+                    previous_word_array.append(sentence[previous_word_index])
+
+                # We compute with laplace the proba of this event
+                proba = predict_with_laplace(pred_dict,
+                                             previous_word_array,
+                                             sentence[wordIndex])
+
+                # We add the log of this proba to the total perplexity
+                total_perplexity += math.log(proba, 2)
+
+            # If the word is out of vocab we count it
+            else:
+                out_of_vocab += 1
+
+    return 2**(-1*(total_perplexity/m)), out_of_vocab/considered_word
