@@ -151,7 +151,7 @@ def prediction_dictionnary(sentence_list, n):
 
             # Populate the pred_dict with each different n
             for i in range(0, len(list_previous_word)+1):
-                populate_pred_dict(list_previous_word[i:], sentence[y], pred_dict)
+                populate_pred_dict(list_previous_word[i:], sentence[x], pred_dict)
 
     return pred_dict
 
@@ -317,6 +317,7 @@ def compute_perplexity_laplace(pred_dict, sentence_array, n):
 
             # If the word is out of vocab we count it
             else:
+                print(sentence[wordIndex])
                 out_of_vocab += 1
 
     return 2**(-1*(total_perplexity/m)), out_of_vocab/considered_word
