@@ -13,8 +13,13 @@ def discounting_factor(train_array_no_unk, train_array, n):
         ngram_occ_dict[str(x)] = ngram_occ
 
     # Calculating the discounting factor
-    for x in range(0, n):
-        pass
+    discounting_array = list()
 
+    for x in range(0, n):
+        n1 = ngram_occ_dict[str(x+1)][1]
+        n2 = ngram_occ_dict[str(x+1)][2]
+
+        discounting_array.append((n1 / (n1 + (2*n2))))
+    print(discounting_array)
     # Return the discounting factors
-    return
+    return discounting_array
