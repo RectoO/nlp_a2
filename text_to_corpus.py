@@ -305,7 +305,6 @@ def compute_perplexity_laplace(pred_dict, sentence_array, n):
     # It is different of m because we also considere OOV words here
     considered_word = 0
 
-
     current_sentence = 0
 
     # For each sentence in the sentence set

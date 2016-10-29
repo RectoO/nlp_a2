@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+from n_gram import n_gram, ngram_occurence
 
 
 def print_occurence(array, path):
@@ -20,15 +21,31 @@ def print_occurence(array, path):
             output.write(key+" = "+str(value)+" ("+str(percent)+"%)\n")
 
 
+def print_all_n_gram(array, n):
+    color_list = ["purple", "blue", "red", "yellow"]
+    for x in range(1, n + 1):
+        print(str(x) + "-gram...")
+        n_gram_dict = n_gram(array, x)
+        print_ngram(n_gram_dict, './ngram/ngram' + str(x))
+        ngram_occ = ngram_occurence(n_gram_dict)
+        print_ngram_occ(ngram_occ, './ngramocc/ngramocc' + str(x))
+        plot_ngram(ngram_occ, x, color_list[x-1])
+
+
 def print_ngram(ngram_dict, path):
 
     with open(path, 'w', encoding="utf-8") as output:
         occurence_list = []
+        total_word = 0
         for key, value in ngram_dict.items():
+            total_word += value
             occurence_list.append((key, value))
+        output.write("Total : " + str(total_word) + "\n")
+        output.write("Differents : " + str(len(ngram_dict)) + "\n")
         for (key, value) in sorted(occurence_list,
                                    key=lambda x: (-x[1], x[0])):
-            output.write(key+" = "+str(value)+"\n")
+            percent = round((value/total_word) * 100, 3)
+            output.write(key+" = "+str(value)+" ("+str(percent)+"%)\n")
 
 
 def print_ngram_occ(ngram_dict, path):
