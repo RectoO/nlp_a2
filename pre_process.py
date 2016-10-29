@@ -131,9 +131,9 @@ def remove_under_3(word_array, get_list=False):
         return word_array
 
 
-def remove_unknown(word_array, unknown_list):
+def remove_unknown(word_array, known_list):
     for x in range(0, len(word_array)):
-        if word_array[x] in unknown_list:
+        if word_array[x] not in known_list:
             word_array[x] = "<UNK>"
 
     return word_array
