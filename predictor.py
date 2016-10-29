@@ -93,11 +93,9 @@ class Predictor(object):
         print(len(sentence_array))
         # For each sentence in the sentence set
         for sentence in sentence_array:
-            print("total perplexity : " + str(total_perplexity))
-            print("out of vocab count : " + str(out_of_vocab))
-            print("m : " + str(m))
             current_sentence += 1
-            print(str(current_sentence) + "/" + str(len(sentence_array)))
+            if current_sentence % 100 == 0:
+                print(str(current_sentence) + "/" + str(len(sentence_array)))
 
             # For each word in the sentence we compute the perplexity
             # We start at n becasue we can' estimate words earlier than n

@@ -6,7 +6,7 @@ def prediction_dictionary(sentence_list, n):
         for x in range(0, len(sentence)):
             # We create a list of the previous word for the current word
             previous_word = list()
-            for y in range(x-n, x):
+            for y in range(x-(n+1), x):
                 if y >= 0:
                     previous_word.append(sentence[y])
 

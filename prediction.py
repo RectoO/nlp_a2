@@ -66,7 +66,6 @@ def proba_backoff_smoothing(pred_dict,
     y_h = 0
 
     if count_h != 0:
-        print("dc : " + str(d_c))
         y_h = len(current_dict.keys()) * (d_c / count_h)
         #print("yh : " + str(y_h))
 
