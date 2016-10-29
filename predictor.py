@@ -1,5 +1,5 @@
 from pre_process import pre_process, get_sentences, sentence_array
-from printer import print_all_n_gram
+from printer import print_all_n_gram, print_all_perplexity
 from prediction_dictionary import prediction_dictionary
 from discounting_factor import discounting_factor
 from prediction import proba_laplace, proba_backoff_smoothing
@@ -28,6 +28,18 @@ class Predictor(object):
             print_all_n_gram(self.train_array, n)
         else:
             print("Array not found")
+
+    def print_perplexity(self, method, array, n):
+        perplexities = []
+        for x in range(1, n + 1):
+            pp, oov = self.calculate_perplexity(method, n, array=array)
+            result = {
+                'n': x,
+                'perplexity': pp,
+                'oov_rate': oov
+            }
+            perplexities.append(result)
+        print_all_perplexity(array, perplexities, method)
 
     def build_prediction_dictionary(self, n=3):
         self.pred_dict = prediction_dictionary(self.train_array, n)
