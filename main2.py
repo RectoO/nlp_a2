@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
     # Building the prediction dictionary
     print("Building the prediction dictionary...")
-    my_predictor.build_prediction_dictionary(n=3)
+    my_predictor.build_prediction_dictionary(n=5)
 
     # Building the ngram occurence dictionary
     print("Building the discounting factors...")

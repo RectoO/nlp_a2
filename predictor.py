@@ -46,7 +46,7 @@ class Predictor(object):
                                            previous_word,
                                            word,
                                            n,
-                                           self.ngram_occ_dict)
+                                           self.dc_dict)
         else:
             print("Method : " + str(method) + " not recognized")
 

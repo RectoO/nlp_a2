@@ -13,7 +13,8 @@ def discounting_factor(train_array_no_unk, train_array, n):
         ngram_occ_dict[str(x)] = ngram_occ
 
     # Calculating the discounting factor
-    # TODO Quentin
+    for x in range(0, n):
+        pass
 
     # Return the discounting factors
     return

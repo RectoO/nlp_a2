@@ -21,7 +21,7 @@ def proba_backoff_smoothing(pred_dict,
                             previous_words,
                             lookedup_word,
                             n,
-                            ngram_occ_dict):
+                            dc_dict):
     if n < 0:
         return 0
     # Init some usefull variables for further compute_expectation
