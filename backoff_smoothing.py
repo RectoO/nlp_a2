@@ -49,4 +49,5 @@ def proba_backoff_smoothing(pred_dict,
 
     # For the two others cases of backoff smoothing we need to compute y_h and d_c
     y_h = 0
-    d_c =
+    d_c = 0
+    # TODO

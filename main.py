@@ -42,9 +42,9 @@ if __name__ == '__main__':
 
     print("Creating dictionnary...")
     pred_dict = prediction_dictionnary(train_sentence_array, 5)
-    print(pred_dict['</s>'])
+    print(pred_dict['<s>']['score'])
     #print("Computing perplexity")
-    print(compute_perplexity_laplace(pred_dict, test_sentence_array, 1))
+    #print(compute_perplexity_laplace(pred_dict, test_sentence_array, 1))
 
 
 

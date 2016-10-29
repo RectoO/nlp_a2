@@ -165,7 +165,7 @@ def prediction_dictionnary(sentence_list, n):
     # We built the dictionnary for each sentence
     for sentence in sentence_list:
         # We iterate trought the words of the sentence
-        for x in range(1, len(sentence)):
+        for x in range(0, len(sentence)):
             # We create a list of the previous word for the current word
             list_previous_word = list()
             for y in range(x-n, x):
