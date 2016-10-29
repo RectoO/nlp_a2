@@ -1,4 +1,4 @@
-from ngram import n_gram, ngram_occurence
+from n_gram import n_gram, ngram_occurence
 
 
 def discounting_factor(train_array_no_unk, train_array, n):

@@ -1,4 +1,4 @@
-def prediction_dictionnary(sentence_list, n):
+def prediction_dictionary(sentence_list, n):
     pred_dict = dict()
     # We built the dictionnary for each sentence
     for sentence in sentence_list:

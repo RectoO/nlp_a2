@@ -31,15 +31,15 @@ def get_out_of_voc(path_train, path_test):
 
     return number, out_of_voc
 
+
 def get_sentence_no_unk(processed_train):
     return sentence_array(processed_train)
 
 
 def get_sentences(processed_train, processed_test):
-    word_array, unknown_list = remove_under_3(processed_train,
-                                              get_list=True)
+    word_array = remove_under_3(processed_train)
     train_array = sentence_array(word_array)
-    test_word_array = remove_unknown(processed_test, unknown_list)
+    test_word_array = remove_unknown(processed_test, set(word_array))
     test_array = sentence_array(test_word_array)
 
     return (train_array, test_array)

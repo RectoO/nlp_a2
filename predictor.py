@@ -1,6 +1,6 @@
 from pre_process import pre_process, get_sentences, sentence_array
 from printer import print_all_n_gram
-from prediction_dictionnary import prediction_dictionnary
+from prediction_dictionary import prediction_dictionary
 from discounting_factor import discounting_factor
 from prediction import proba_laplace, proba_backoff_smoothing
 
@@ -30,7 +30,7 @@ class Predictor(object):
             print("Array not found")
 
     def build_prediction_dictionary(self, n=3):
-        self.pred_dict = prediction_dictionnary(self.train_array, n)
+        self.pred_dict = prediction_dictionary(self.train_array, n)
 
     def build_discounting_factor(self, n=5):
         self.dc_dict = discounting_factor(self.train_array_no_unk,
@@ -50,5 +50,12 @@ class Predictor(object):
         else:
             print("Method : " + str(method) + " not recognized")
 
-    def calculate_perplexity(self, method):
+    def check_consistency(self, previous_word, method):
+        total_proba = 0
+        for key, value in self.pred_dict.items():
+            total_proba += self.proba(previous_word, key, method)
+
+        return total_proba
+
+    def calculate_perplexity(self, method, n, array='test'):
         pass
