@@ -12,8 +12,31 @@ def get_sentence_array_process(path):
     return sentence_array(get_words_array(path))
 
 
+def get_out_of_voc(path_train, path_test):
+    train_word_array, unknown_list = remove_under_3(pre_process(path_train),
+                                                    get_list=True)
+    test_word_array = remove_unknown(pre_process(path_test), unknown_list)
+    number = 0
+    out_of_voc = set()
+    word_dict = {}
+    for word in train_word_array:
+        if word in word_dict:
+            word_dict[word] += 1
+        else:
+            word_dict[word] = 1
+    print(len(train_word_array))
+    print(len(test_word_array))
+    for word in test_word_array:
+        if word not in word_dict:
+            number += 1
+            out_of_voc.add(word)
+
+    return number, out_of_voc
+
+
 def get_sentence_array(path_train, path_test):
-    word_array, unknown_list = remove_under_3(pre_process(path_train), get_list=True)
+    word_array, unknown_list = remove_under_3(pre_process(path_train),
+                                              get_list=True)
     train_array = sentence_array(word_array)
     test_word_array = remove_unknown(pre_process(path_test), unknown_list)
     test_array = sentence_array(test_word_array)
