@@ -3,7 +3,7 @@ import matplotlib.patches as mpatches
 from n_gram import n_gram, ngram_occurence
 
 
-def print_all_perplexity(array, perplexities, method, array):
+def print_all_perplexity(array, perplexities, method):
     path = './perplexities/'+str(method)+"-on-"+str(array)
     with open(path, 'w', encoding="utf-8") as output:
         for result in perplexities:
