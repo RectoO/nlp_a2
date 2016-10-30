@@ -30,10 +30,11 @@ class Predictor(object):
         else:
             print("Array not found")
 
-    def print_perplexity(self, method, array, n):
+    def print_perplexity(self, method, n, array):
         perplexities = []
         for x in range(1, n + 1):
-            pp, oov = self.calculate_perplexity(method, n, array=array)
+            print("Computing perplexities for n = " + str(x))
+            pp, oov = self.calculate_perplexity(method, x, array=array)
             result = {
                 'n': x,
                 'perplexity': pp,
@@ -107,17 +108,13 @@ class Predictor(object):
 
                 m += 1
 
-                # We create an array with the word history
-                previous_word_array = list()
-                for previous_word_index in range(wordIndex-(n-1), wordIndex):
-                    previous_word_array.append(sentence[previous_word_index])
-
                 # We compute with laplace the proba of this event
-                proba = self.proba(previous_word_array,
+                proba = self.proba(sentence[wordIndex-(n-1):wordIndex],
                                    sentence[wordIndex],
                                    method)
 
                 # We add the log of this proba to the total perplexity
                 total_perplexity += math.log(proba, 2)
 
+        print(str(current_sentence) + "/" + str(len(sentence_array)))
         return 2**(-1*(total_perplexity/m)), out_of_vocab/m

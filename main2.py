@@ -16,11 +16,14 @@ if __name__ == '__main__':
 
     # Building the prediction dictionary
     print("Building the prediction dictionary...")
-    my_predictor.build_prediction_dictionary(n=2)
+    my_predictor.build_prediction_dictionary(n=5)
 
+    """
     # Building the ngram occurence dictionary
     print("Building the discounting factors...")
-    my_predictor.build_discounting_factor(n=2)
+    my_predictor.build_discounting_factor(n=4)
+    """
 
-    print("Computing the perplexity for backoff...")
-    print(my_predictor.calculate_perplexity('backoff', 2))
+
+    print("Computing the perplexity for laplace...")
+    my_predictor.print_perplexity('laplace', 5, 'test')
