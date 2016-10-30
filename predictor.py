@@ -41,7 +41,7 @@ class Predictor(object):
                 'oov_rate': oov
             }
             perplexities.append(result)
-        print_all_perplexity(array, perplexities, method)
+        print_all_perplexity(array, perplexities, method, array)
 
     def build_prediction_dictionary(self, n=3):
         self.pred_dict = prediction_dictionary(self.train_array, n)
