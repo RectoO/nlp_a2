@@ -2,6 +2,7 @@ from n_gram import n_gram, ngram_occurence
 
 
 def discounting_factor(train_array_no_unk, train_array, n):
+
     # Building the ngram occurence dictionary
     ngram_occ_dict = dict()
     n_gram_dict = n_gram(train_array_no_unk, 1)
@@ -20,6 +21,6 @@ def discounting_factor(train_array_no_unk, train_array, n):
         n2 = ngram_occ_dict[str(x+1)][2]
 
         discounting_array.append((n1 / (n1 + (2*n2))))
-    print(discounting_array)
+
     # Return the discounting factors
     return discounting_array

@@ -7,8 +7,10 @@ import math
 
 
 class Predictor(object):
-    """
-    TODO
+    """Predictor object takes a train_test_corpus_path_path and test_corpus_path
+    It allow to create 2 models on this corpus : Laplace and backoff smoothing
+    Predictor allows to make predictions, compute perplexities and check models
+    consistency
     """
     def __init__(self, train_path, test_path):
         # Preprocessed train and test
@@ -91,7 +93,6 @@ class Predictor(object):
         out_of_vocab = 0
 
         current_sentence = 0
-        print(len(sentence_array))
         # For each sentence in the sentence set
         for sentence in sentence_array:
             current_sentence += 1
@@ -116,5 +117,4 @@ class Predictor(object):
                 # We add the log of this proba to the total perplexity
                 total_perplexity += math.log(proba, 2)
 
-        print(str(current_sentence) + "/" + str(len(sentence_array)))
         return 2**(-1*(total_perplexity/m)), out_of_vocab/m
